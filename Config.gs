@@ -3,13 +3,13 @@ const CONFIG = {
   // ID folderu z raportami CSV
   FOLDER_ID: "1s7Hkqv8oj1QZjhRnmXur_Go_2rGwuEUB",
 
-  // Nazwa arkusza głównego
+  // Arkusz główny
   MAIN_SHEET: "BAZA",
 
-  // Nazwa arkusza ze statystykami
+  // Arkusz podsumowania
   SUMMARY_SHEET: "PODSUMOWANIE",
 
-  // Nagłówki w bazie
+  // Nagłówki
   HEADERS: [
     "DATA",
     "START",
@@ -19,7 +19,7 @@ const CONFIG = {
     "DOKĄD",
     "POWRÓT",
     "PACJENT",
-    "ZLECA",
+    "ZLECAJĄCY",
     "TRYB",
     "CEL"
   ]
