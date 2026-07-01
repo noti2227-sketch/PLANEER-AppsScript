@@ -34,6 +34,8 @@ function importCsvReports() {
 
     Logger.log("Zaimportowano.");
   }
+    // <-- DODAJ TĘ JEDNĄ LINIĘ
+  rebuildHospitalSheets();
 }
 
 function importSingleCsv(file, sheet) {
