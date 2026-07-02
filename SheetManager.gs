@@ -117,36 +117,23 @@ function distributeHospitalData() {
 
     let sheetName;
 
-    // Pilchowice zawsze do Pilchowic
-    if (from.includes("PILCHOWIC") || to.includes("PILCHOWIC")) {
+    const isSw = from.includes("ŚWIĘTOCHŁOWIC") || to.includes("ŚWIĘTOCHŁOWIC");
+    const isZab = from.includes("ZABRZ") || to.includes("ZABRZ");
+    const isCzd = from.includes("CENTRUM ZDROWIA DZIECKA") || to.includes("CENTRUM ZDROWIA DZIECKA");
+    const isKol = from.includes("KOLEJOWY") || to.includes("KOLEJOWY");
+    const isRck = from.includes("RCKIK") || to.includes("RCKIK") || from.includes("REGIONALNE CENTRUM KRWIODAWSTWA") || to.includes("REGIONALNE CENTRUM KRWIODAWSTWA");
 
+    if (((isSw && (isZab || isCzd || isKol)) || (isZab && (isCzd || isKol)) || (isCzd && isKol) || (isSw && isRck))) {
+      sheetName = "FRYDA";
+    } else if (from.includes("PILCHOWIC") || to.includes("PILCHOWIC")) {
       sheetName = "SZPITAL CHORÓB PŁUC PILCHOWICE";
-
-    // Bytom nr 1 -> SPSK Francuska
-    } else if (
-      from.includes("BYTOM") &&
-      (to.includes("FRANCUSKA") ||
-       to.includes("SAMODZIELNY PUBLICZNY SZPITAL KLINICZNY"))
-    ) {
-
+    } else if (from.includes("BYTOM") && (to.includes("FRANCUSKA") || to.includes("SAMODZIELNY PUBLICZNY SZPITAL KLINICZNY"))) {
       sheetName = "SZPITAL NR 1 BYTOM";
-
-    // ZSM Chorzów -> Specjalistyczny Chorzów
-    } else if (
-      from.includes("ZESPÓŁ SZPITALI MIEJSKICH") &&
-      to.includes("ZJEDNOCZENIA")
-    ) {
-
+    } else if (from.includes("ZESPÓŁ SZPITALI MIEJSKICH") && to.includes("ZJEDNOCZENIA")) {
       sheetName = "SZPITAL SPECJALISTYCZNY CHORZÓW";
-
     } else {
-
       sheetName = getHospitalSheetName(to);
-
-      if (sheetName === "RCKIK" || sheetName === "INNE") {
-        sheetName = getHospitalSheetName(from);
-      }
-
+      if (sheetName === "RCKIK" || sheetName === "INNE") sheetName = getHospitalSheetName(from);
     }
 
     if (!grouped[sheetName]) {
