@@ -112,74 +112,51 @@ function distributeHospitalData() {
 
   data.forEach(row => {
 
-const from = (row[4] || "").toUpperCase();
-const to   = (row[5] || "").toUpperCase();
+    const from = (row[4] || "").toUpperCase();
+    const to   = (row[5] || "").toUpperCase();
 
-let sheetName;
-// ===== WYJĄTKI =====
+    let sheetName;
 
-// Bytom nr 1 -> SPSK SUM Katowice
-if (
-    from.includes("BYTOM") &&
-    to.includes("SAMODZIELNY PUBLICZNY SZPITAL KLINICZNY")
-) {
-    sheetName = "SZPITAL NR 1 BYTOM";
-}
+    // Pilchowice zawsze do Pilchowic
+    if (from.includes("PILCHOWIC") || to.includes("PILCHOWIC")) {
 
-// Zespół Szpitali Miejskich -> Szpital Specjalistyczny Chorzów
-else if (
-    from.includes("ZESPÓŁ SZPITALI MIEJSKICH W CHORZOWIE") &&
-    to.includes("ZJEDNOCZENIA 10")
-) {
+      sheetName = "SZPITAL CHORÓB PŁUC PILCHOWICE";
 
-    sheetName = "SZPITAL SPECJALISTYCZNY CHORZÓW";
-
-}
-
-else {
-
-    sheetName = getHospitalSheetName(to);
-
-    if (
-        sheetName === "RCKIK" ||
-        sheetName === "INNE"
+    // Bytom nr 1 -> SPSK Francuska
+    } else if (
+      from.includes("BYTOM") &&
+      (to.includes("FRANCUSKA") ||
+       to.includes("SAMODZIELNY PUBLICZNY SZPITAL KLINICZNY"))
     ) {
+
+      sheetName = "SZPITAL NR 1 BYTOM";
+
+    // ZSM Chorzów -> Specjalistyczny Chorzów
+    } else if (
+      from.includes("ZESPÓŁ SZPITALI MIEJSKICH") &&
+      to.includes("ZJEDNOCZENIA")
+    ) {
+
+      sheetName = "SZPITAL SPECJALISTYCZNY CHORZÓW";
+
+    } else {
+
+      sheetName = getHospitalSheetName(to);
+
+      if (sheetName === "RCKIK" || sheetName === "INNE") {
         sheetName = getHospitalSheetName(from);
+      }
+
     }
 
-}
-
-// ===== PRIORYTET DLA PILCHOWIC =====
-if (
-    from.includes("PILCHOWIC") ||
-    to.includes("PILCHOWIC")
-) {
-
-    sheetName = "SZPITAL CHORÓB PŁUC PILCHOWICE";
-
-} else {
-
-    // Standardowe przypisanie po miejscu docelowym
-    sheetName = getHospitalSheetName(to);
-
-    // Jeżeli DOKĄD to RCKIK lub brak dopasowania,
-    // sprawdź miejsce wyjazdu.
-    if (
-        sheetName === "RCKIK" ||
-        sheetName === "INNE"
-    ) {
-        sheetName = getHospitalSheetName(from);
+    if (!grouped[sheetName]) {
+      grouped[sheetName] = [];
     }
 
-}
-
-if (!grouped[sheetName]) {
-  grouped[sheetName] = [];
-}
-
-grouped[sheetName].push(row);
+    grouped[sheetName].push(row);
 
   });
+
 
   Object.keys(grouped).forEach(sheetName => {
 
