@@ -43,12 +43,6 @@ function createHospitalSheets() {
 
     sheet.setFrozenRows(1);
 
-    try {
-      if (sheet.getFilter()) {
-        sheet.getFilter().remove();
-      }
-      sheet.getRange(1, 1, 1, BAZA_HEADERS.length).createFilter();
-    } catch (e) {}
 
   });
 
